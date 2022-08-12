@@ -1,7 +1,7 @@
-SRC = $(shell find logo/ -type f)
-CONDA = source $$(conda info --base)/etc/profile.d/conda.sh; conda activate;
-SVGS = $(shell find -type f -wholename "./docs/*.svg")
-PNGS = $(patsubst ./docs/svg/%.svg,./docs/png/%.png, $(SVGS))
+SRC := $(shell find logo/ -type f)
+CONDA := source $$(conda info --base)/etc/profile.d/conda.sh; conda activate;
+SVGS := $(shell find -type f -wholename "./docs/*.svg")
+PNGS := $(patsubst ./docs/svg/%.svg,./docs/png/%.png, $(SVGS))
 REV := $(shell date +'%Y.%m.%d-' )$(shell git describe --always --dirty | sed s'/dirty/dev/')
 
 
