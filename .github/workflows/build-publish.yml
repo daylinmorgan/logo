@@ -6,9 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install System Dependencies
-        run: sudo apt-get update && sudo apt-get install imagemagick
-
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v2
 

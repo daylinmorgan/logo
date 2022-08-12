@@ -8,8 +8,10 @@ REV := $(shell date +'%Y.%m.%d-' )$(shell git describe --always --dirty | sed s'
 .PHONY: all
 all:
 	@echo "==> Generating SVGs <=="
+	@mkdir -p docs/svg
 	@$(MAKE) svgs
 	@echo "==> Generating PNGs <=="
+	@mkdir -p docs/png
 	@$(MAKE) pngs
 
 .PHONY: pngs
