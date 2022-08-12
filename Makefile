@@ -4,12 +4,6 @@ SVGS = $(shell find -type f -wholename "./docs/*.svg")
 PNGS = $(patsubst ./docs/svg/%.svg,./docs/png/%.png, $(SVGS))
 REV := $(shell date +'%Y.%m.%d-' )$(shell git describe --always --dirty | sed s'/dirty/dev/')
 
-ifneq ($(DOCKER),true)
-    CONVERT := convert
-else
-    CONVERT := docker run --rm -v "$$(pwd)":/imgs dpokidov/imagemagick
-endif
-
 
 .PHONY: all
 all:
@@ -23,7 +17,7 @@ all:
 pngs: $(PNGS)
 
 ./docs/png/%.png: ./docs/svg/%.svg
-	$(CONVERT) $(if DOCKER=true,/imgs/)$< $(if DOCKER=true,/imgs/)$@
+	convert $< -scale 1024 $@
 
 .PHONY: logos
 ## generate all of the logo svgs
@@ -53,6 +47,7 @@ pdm-env: conda-env
 ## remove old files
 clean:
 	rm -f *.svg *.png
+	rm -f docs/*.svg
 	rm -f docs/svg/*
 	rm -f docs/png/*
 
