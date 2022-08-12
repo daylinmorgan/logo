@@ -5,9 +5,9 @@ PNGS = $(patsubst ./docs/svg/%.svg,./docs/png/%.png, $(SVGS))
 REV := $(shell date +'%Y.%m.%d-' )$(shell git describe --always --dirty | sed s'/dirty/dev/')
 
 ifneq ($(DOCKER),true)
-    INKSCAPE := inkscape
+    CONVERT := convert
 else
-    INKSCAPE := docker run --rm -v "$$(pwd)":/data daylinmorgan/inkscape
+    CONVERT := docker run --rm -v "$$(pwd)":/imgs dpokidov/imagemagick
 endif
 
 
@@ -23,7 +23,7 @@ all:
 pngs: $(PNGS)
 
 ./docs/png/%.png: ./docs/svg/%.svg
-	$(INKSCAPE) --export-filename=$@ $<
+	$(CONVERT) $(if DOCKER=true,/imgs/)$< $(if DOCKER=true,/imgs/)$@
 
 .PHONY: logos
 ## generate all of the logo svgs
@@ -48,11 +48,6 @@ pdm-env: conda-env
 	$(CONDA) conda activate ./env; \
 		pip install pdm; \
 		pdm install
-
-.PHONY: docker.build
-## build the docker container for inkscape
-docker.build:
-	docker build . -t daylinmorgan/inkscape
 
 .PHONY: clean
 ## remove old files
