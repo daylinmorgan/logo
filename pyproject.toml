@@ -1,0 +1,28 @@
+[project]
+name = "logo"
+authors = [
+    {name = "Daylin Morgan", email = "daylinmorgan@gmail.com"},
+]
+dependencies = [
+    "svgwrite>=1.4.3",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dynamic = ["version"]
+
+[project.scripts]
+logo = "logo.main:main"
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=22.6.0",
+    "isort>=5.10.1",
+    "flake8>=4.0.1",
+]
+
+[tool.pdm]
+version = {use_scm=true}

@@ -1,0 +1,21 @@
+name: Build Logo's and Deploy Static Assets
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get install inkscape
+
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v2
+
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: pdm install
+
+      - name: Build Logo's
+      - run: make all

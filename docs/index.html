@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #11111b;
+        margin: 1% auto;
+        width: 70%;
+      }
+      img {
+        width: 20em;
+      }
+      .header {
+        font-family: "Roboto", sans-serif;
+        font-size: xx-large;
+        color: #f5e0dc;
+        margin: 1% auto;
+        text-align: center;
+        width: auto;
+        border: 5px;
+        border-style: solid;
+        border-radius: 50px;
+        border-color: #f5e0dc;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        padding: 10px;
+      }
+      .grid-item {
+        text-align: center;
+        width: 14vw;
+      }
+      @media only screen and (max-width: 1000px) {
+        .header {
+          font-size: large;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>My Logos</h1>
+    </div>
+
+    <div class="grid-container">
+      <img class="grid-item" src="./svg/logo-bg-rect-b-dark.svg" />
+      <img class="grid-item" src="./svg/logo-bg-circle-b-dark.svg" />
+      <img class="grid-item" src="./svg/logo-bg-rect-b-light.svg" />
+      <img class="grid-item" src="./svg/logo-bg-circle-b-light.svg" />
+
+      <img class="grid-item" src="./svg/logo-bg-rect-dark.svg" />
+      <img class="grid-item" src="./svg/logo-bg-circle-dark.svg" />
+      <img class="grid-item" src="./svg/logo-bg-rect-light.svg" />
+      <img class="grid-item" src="./svg/logo-bg-circle-light.svg" />
+
+      <img class="grid-item" src="./svg/logo-dark.svg" />
+      <img class="grid-item" src="./svg/logo-dark.svg" />
+      <img class="grid-item" src="./svg/logo-light.svg" />
+      <img class="grid-item" src="./svg/logo-light.svg" />
+    </div>
+  </body>
+</html>
