@@ -55,11 +55,10 @@ clean:
 	rm -f docs/png/*
 
 
-FILL = 15
 .PHONY: help
-## Display this help screen
 help: ## try `make help`
 	@awk '/^[a-z.A-Z_-]+:/ { helpMessage = match(lastLine, /^##(.*)/); \
-    if (helpMessage) { helpCommand = substr($$1, 0, index($$1, ":")-1); \
-    helpMessage = substr(lastLine, RSTART + 3, RLENGTH); printf "\033[36m%-$(FILL)s\033[0m%s\n"\
-    , helpCommand, helpMessage;}} { lastLine = $$0 }' $(MAKEFILE_LIST)
+		if (helpMessage) { helpCommand = substr($$1, 0, index($$1, ":")-1); \
+		helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
+		printf "\033[36m%-9s\033[0m - %s\n", \
+		helpCommand, helpMessage;}} { lastLine = $$0 }' $(MAKEFILE_LIST)
