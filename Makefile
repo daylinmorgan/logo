@@ -11,6 +11,7 @@ all:
 	@mkdir -p docs/svg
 	@$(MAKE) svgs
 	@echo "==> Generating PNGs <=="
+	@cat docs/index.html | sed 's/svg/png/g' | sed 's/\.\/png/\./g' > docs/png/index.html
 	@mkdir -p docs/png
 	@$(MAKE) pngs
 
