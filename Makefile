@@ -19,8 +19,8 @@ all:
 ## generate all of the logo pngs
 pngs: $(PNGS)
 
-./docs/png/%.png: ./docs/svg/%.svg
-	convert $< -scale 1024 $@
+docs/png/%.png: docs/svg/%.svg
+	@inkscape --export-filename=$@ $<
 
 .PHONY: logos
 ## generate all of the logo svgs
