@@ -25,10 +25,9 @@ jobs:
     steps:
       - name: Get Inkscape
         run: |
-          sudo apt install libfuse2
-          wget -O Inkscape.AppImage https://inkscape.org/gallery/item/34672/Inkscape-9c6d41e-x86_64.AppImage
-          chmod u+x Inkscape.AppImage
-          sudo mv Inkscape.AppImage /usr/bin/inkscape
+          sudo add-apt-repository ppa:inkscape.dev/stable
+          sudo apt update
+          sudo apt install inkscape
 
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v2
