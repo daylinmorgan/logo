@@ -12,12 +12,19 @@ all:
 	@$(MAKE) svgs
 	@echo "==> Generating PNGs <=="
 	@mkdir -p docs/png
-	@cat docs/index.html | sed 's/svg/png/g' | sed 's/\.\/png/\./g' > docs/png/index.html
+	@$(MAKE) docs/png/index.html
 	@$(MAKE) pngs
 
 .PHONY: pngs
 ## generate all of the logo pngs
 pngs: $(PNGS)
+
+docs/png/index.html: docs/index.html
+	@cat docs/index.html |\
+		sed 's/svg/png/g' |\
+		sed 's/\.\/png/\./g' |\
+		sed s'/My Logos/My Logos but PNG/g' \
+		> docs/png/index.html
 
 docs/png/%.png: docs/svg/%.svg
 	@inkscape --export-filename=$@ $<
