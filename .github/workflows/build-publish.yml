@@ -24,7 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Inkscape
-        run: sudo apt-get update && sudo apt-get install -y inkscape
+        run: |
+          wget -O Inkscape.AppImage https://inkscape.org/gallery/item/34672/Inkscape-9c6d41e-x86_64.AppImage
+          chmod u+x Inkscape.AppImage
+          sudo mv Inkscape.AppImage /usr/bin/inkscape
 
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v2
