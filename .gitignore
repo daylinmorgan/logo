@@ -170,3 +170,4 @@ cython_debug/
 docs/*
 !docs/index.html
 
+.task.mk
