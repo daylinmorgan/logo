@@ -15,7 +15,6 @@ all:
 	@$(MAKE) docs/png/index.html
 	@$(MAKE) pngs
 
-.PHONY: pngs
 pngs: $(PNGS) ## generate all of the logo pngs
 
 docs/png/index.html: docs/index.html
@@ -28,17 +27,14 @@ docs/png/index.html: docs/index.html
 docs/png/%.png: docs/svg/%.svg
 	@inkscape --export-filename=$@ $<
 
-.PHONY: logos
 svgs: $(SRC) ## generate all of the logo svgs
 	./generate-all.py $(REV)
 
-.PHONY: lint
 lint: ## apply isort/black/flake8
 	@isort logo
 	@black logo
 	@flake8 logo
 
-.PHONY: bootstrap pdm-env conda-env
 bootstrap: pdm-env ## bootstrap the conda environment
 
 conda-env:
@@ -49,7 +45,6 @@ pdm-env: conda-env
 		pip install pdm; \
 		pdm install
 
-.PHONY: clean
 clean: ## remove old files
 	rm -f *.svg *.png
 	rm -f docs/*.svg
