@@ -5,14 +5,15 @@ from pathlib import Path
 
 from logo import generate
 
+PROJECT_ROOT = Path(__file__).parent.parent
 
 def main():
     rev = sys.argv[1]
     comment = f"© 2022 Daylin Morgan | rev. {rev}"
 
-    if not (Path.cwd() / "docs" / "svg").is_dir():
+    if not ( PROJECT_ROOT / "docs" / "svg").is_dir():
         print("making docs directory")
-        (Path.cwd() / "docs" / "svg").mkdir(exist_ok=True)
+        (PROJECT_ROOT / "docs" / "svg").mkdir(exist_ok=True)
 
     for theme in ["dark", "light"]:
         for background in ["rect", "circle", None]:
@@ -24,7 +25,7 @@ def main():
                     name.append("b")
 
                 name.append(theme)
-                name = f"docs/svg/{'-'.join(name)}.svg"
+                name = f"{PROJECT_ROOT}/docs/svg/{'-'.join(name)}.svg"
                 generate(
                     name=name,
                     background=background,
@@ -34,7 +35,7 @@ def main():
                 )
 
         generate(
-            name=f"docs/{theme}.svg",
+            name=f"{PROJECT_ROOT}/docs/{theme}.svg",
             background="circle",
             border=True,
             theme=theme,

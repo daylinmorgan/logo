@@ -28,7 +28,7 @@ docs/png/%.png: docs/svg/%.svg
 	@inkscape --export-filename=$@ $<
 
 svgs: $(SRC) ## generate all of the logo svgs
-	./generate-all.py $(REV)
+	./scripts/generate-all.py $(REV)
 
 lint: ## apply isort/black/flake8
 	@isort logo
