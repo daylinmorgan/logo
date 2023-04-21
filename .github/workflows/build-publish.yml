@@ -29,17 +29,20 @@ jobs:
           sudo apt update
           sudo apt install inkscape
 
-      - name: Setup PDM
-        uses: pdm-project/setup-pdm@v2
-
       - name: checkout repo
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: pdm install
+      - name: Setup nim
+        uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: '1.6.12' # default is 'stable'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Deps
+        run: nimble install --depsOnly -y
 
       - name: Build Logo's
-        run: pdm run make all
+        run: make all
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v1.0.3

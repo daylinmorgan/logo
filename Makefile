@@ -1,9 +1,3 @@
-SRC := $(shell find logo/ -type f)
-CONDA := source $$(conda info --base)/etc/profile.d/conda.sh; conda activate;
-SVGS := $(shell find -type f -wholename "./docs/*.svg")
-PNGS := $(patsubst ./docs/svg/%.svg,./docs/png/%.png, $(SVGS))
-REV := $(shell date +'%Y.%m.%d-' )$(shell git describe --always --dirty | sed s'/dirty/dev/')
-
 
 .PHONY: all
 all:
@@ -15,7 +9,14 @@ all:
 	@$(MAKE) docs/png/index.html
 	@$(MAKE) pngs
 
-pngs: $(PNGS) ## generate all of the logo pngs
+svgs: ## generate all svgs
+	nimble run
+
+pngs: ## generate all of the logo pngs
+	nimble pngs
+
+ascii: ## generate all ascii variants
+	./scripts/ascii.nims
 
 docs/png/index.html: docs/index.html
 	@cat docs/index.html |\
@@ -23,27 +24,6 @@ docs/png/index.html: docs/index.html
 		sed 's/\.\/png/\./g' |\
 		sed s'/My Logos/My Logos but PNG/g' \
 		> docs/png/index.html
-
-docs/png/%.png: docs/svg/%.svg
-	@inkscape --export-filename=$@ $<
-
-svgs: $(SRC) ## generate all of the logo svgs
-	./scripts/generate-all.py $(REV)
-
-lint: ## apply isort/black/flake8
-	@isort logo
-	@black logo
-	@flake8 logo
-
-bootstrap: pdm-env ## bootstrap the conda environment
-
-conda-env:
-	$(CONDA) CONDA_ALWAYS_YES="true" mamba create -p ./env python --force
-
-pdm-env: conda-env
-	$(CONDA) conda activate ./env; \
-		pip install pdm; \
-		pdm install
 
 clean: ## remove old files
 	rm -f *.svg *.png
