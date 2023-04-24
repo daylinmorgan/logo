@@ -47,8 +47,9 @@ when isMainModule:
   for al in @[
     AsciiLogo(braille: true, threshold: 20),
     AsciiLogo(braille: true, height: 15, threshold: 20),
-    AsciiLogo(braille: false, height: 50),
-    AsciiLogo(color: true, height: 30, baseFile: "./docs/png/logo-bg-circle-b-dark.png")
+    AsciiLogo(height: 50),
+    AsciiLogo(color: true, height: 30, baseFile: "./docs/png/logo-bg-circle-b-dark.png"),
+    AsciiLogo(braille: true, height: 20, threshold: 50 , baseFile: "./docs/png/logo-bg-circle-b-dark.png")
   ]:
     al.make()
 
