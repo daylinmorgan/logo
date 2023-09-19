@@ -11,7 +11,7 @@ binDir        = "bin"
 
 # Dependencies
 
-requires "nim >= 1.6.12",
+requires "nim >= 2.0.0",
          "nimsvg"
 
 proc getSvgs(): seq[string] =
@@ -21,6 +21,6 @@ proc makePng(svg: string) =
   echo svg & " -> " & svg.replace("svg","png")
   exec "inkscape --export-filename=" & svg.replace("svg","png") & " " & svg
 
-task pngs, "fetch dependencies":
+task pngs, "generate pngs":
   for svg in getSvgs():
     makePng(svg)
