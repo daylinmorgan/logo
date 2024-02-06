@@ -30,12 +30,11 @@ jobs:
           sudo apt install inkscape
 
       - name: checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v1
         with:
-          nim-version: '1.6.12' # default is 'stable'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Deps
@@ -58,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v1
       - name: Deploy to GitHub Pages
