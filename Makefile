@@ -10,7 +10,8 @@ all:
 	@$(MAKE) pngs
 
 svgs: ## generate all svgs
-	nimble run
+	nimble run -- --background none,square,circle --style light,dark --border --output docs/svg
+	nimble run -- --background none,square,circle --style light,dark --output docs/svg
 
 pngs: ## generate all of the logo pngs
 	nimble pngs
@@ -24,6 +25,9 @@ docs/png/index.html: docs/index.html
 		sed 's/\.\/png/\./g' |\
 		sed s'/My Logos/My Logos but PNG/g' \
 		> docs/png/index.html
+
+assets/logo.svg:
+	nimble run -- --background circle --style dark --animate --border --output assets/logo.svg
 
 clean: ## remove old files
 	rm -f *.svg *.png

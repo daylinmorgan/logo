@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- © 2023 Daylin Morgan | rev. da2aae4 -->
+<!-- © 2023 Daylin Morgan | rev. 590de5a -->
 <svg height="800" width="800" xmlns="http://www.w3.org/2000/svg" version="1.1">
   <defs>
     <style type="text/css">
@@ -10,11 +10,11 @@
 }
 
 .fg {
-  fill:#f5e0dc;
-  stroke:#f5e0dc;
+  fill: #f5e0dc;
+  stroke: #f5e0dc;
 }
 .border {
-  fill:none;
+  fill: none;
   stroke-width: 5;
 }
 
@@ -28,6 +28,17 @@
 .d {
   stroke-width: 15;
 }
+.m {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: draw 2.5s linear forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 
     </style>
   </defs>
@@ -36,7 +47,7 @@
     <circle class="fg border" cx="400.0" cy="400.0" r="380.0"/>
   </g>
   <g class="fg logo">
-    <path d="        M 280.4,548.0
+    <path class="m" d="        M 280.4,548.0
         l -160.0,0
         l 80.0,-280.0
         l 199.6,400.0
@@ -45,6 +56,7 @@
         l -160.0, 0
         "/>
     <g class="d">
+      <animateTransform attributeName="transform" begin="0s" dur="2.25s" type="rotate" from="0 400.0 268.0" to="360 400.0 268.0"/>
       <circle cx="400.0" cy="268.0" r="136.0"/>
       <path class="fg" d="M 264.0,268.0 a 1 1 0 0 0 272.0 0 z"/>
     </g>

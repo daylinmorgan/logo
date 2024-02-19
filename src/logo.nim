@@ -1,26 +1,35 @@
-import std/[os, strformat, strutils]
+import std/[os, strformat, strutils, sugar]
 import nimsvg
 
 const
   baseCSS = slurp "css/base.css"
   lightCSS = slurp "css/light.css"
   darkCSS = slurp "css/dark.css"
+  animateCss = slurp "css/animation.css"
   version = staticExec "git describe --tags HEAD --always"
+  scale = 800
 
 type
   Style = enum
-    stLight, stDark
+    stLight = "light"
+    stDark = "dark"
   Background = enum
-    bgNone, bgCircle, bgSquare
+    bgNone = "none"
+    bgCircle = "circle"
+    bgSquare ="square"
+
   Point = object
     x, y: float64
   Logo = object
     background: Background
-    border: bool
+    animate, border: bool
     style: Style
 
-
-const scale = 800
+  LogoContext = object
+    border, animate: bool
+    output: string
+    backgrounds: seq[Background]
+    styles: seq[Style]
 
 
 proc calcCoordinates(my1, my2, mx1, mx2, dr, gap: float64): tuple[my1, my2, mx1,
@@ -56,9 +65,10 @@ proc drawM(): Nodes =
   let startEndOffset = 0.15 * (coord.mx1)
   let moveTo = Point(x: coord.mc.x - coord.mx1 - startEndOffset, y: coord.mc.y)
 
-  # path(
   buildSvg:
-    path(d = &"""
+    path(
+      `class` ="m",
+      d = &"""
         M {moveTo.x},{moveTo.y}
         l -{coord.mx2},0
         l {coord.mx2/2},-{coord.my2}
@@ -70,10 +80,13 @@ proc drawM(): Nodes =
     )
 
 
-proc drawD(): Nodes =
+proc drawD(animate: bool): Nodes =
   let start = Point(x: coord.dc.x - coord.dr, y: coord.dc.y)
   buildSvg:
     g(class = "d"):
+      if animate:
+        let coords = $coord.dc.x & " " & $coord.dc.y
+        animateTransform(attributeName="transform", begin="0s" ,dur="2.25s", type="rotate", `from`="0 " & coords, to="360 " & coords)
       circle(cx = coord.dc.x, cy = coord.dc.y, r = coord.dr)
       path(class = "fg", d = &"M {start.x},{start.y} a 1 1 0 0 0 {coord.dr*2} 0 z")
 
@@ -91,12 +104,14 @@ proc addBackground(bg: Background, border: bool = true): Nodes =
           rect(class = "fg border", height = scale-2*coord.gap,
               width = scale-2*coord.gap, x = coord.gap, y = coord.gap)
 
-proc addStyle(s: Style): Nodes =
+proc addStyle(l: Logo): Nodes =
   var css: string
-  case s:
+  case l.style:
     of stDark: css &= darkCSS
     of stLight: css &= lightCSS
   css &= baseCSS
+  if l.animate:
+    css &= animateCss
   buildSvg:
     style(type = "text/css"):
       t: css
@@ -119,33 +134,77 @@ proc fname(l: Logo): string =
 proc makeLogo(l: Logo, prefix = "docs/svg", fileName = "") =
   if not dirExists(prefix): createDir(prefix)
   let fname = prefix / (if fileName == "": l.fname() else: fileName)
-
+  echo "generating logo at: ", fname
   buildSvgFile(fname):
-    t: &"<!-- © 2023 Daylin Morgan | rev. {version} -->"
+    t: &"<!-- © 2024 Daylin Morgan | rev. {version} -->"
     svg(height = scale, width = scale):
-      defs: embed addStyle(l.style)
+      defs: embed addStyle(l)
       if l.background != bgNone: embed addBackground(l.background, l.border)
       g(class = "fg logo"):
         embed drawM()
-        embed drawD()
+        embed drawD(l.animate)
 
 when isMainModule:
-  for bg in @[bgNone, bgSquare, bgCircle]:
-    for style in @[stLight, stDark]:
-      for border in @[true, false]:
+  import std/parseopt
+  const usage = """
+logo [opts]
+
+options:
+  -h, --help
+    show this help
+  -a, --animate
+    add animation to logo
+  -o, --output
+    output file or path
+  -b, --background
+    comma-seperated list of backgrounds [none,square,circle]
+  -s, --style
+    comma-seperated list of styles [light,dark]
+  --border
+    add border
+"""
+
+  var c = LogoContext()
+  for kind, key, val in getopt(shortNoVal = {'h','a'}, longNoVal = @["help","animate","border"]):
+    case kind
+    of cmdArgument: echo "unexpected positional arg: " & key; quit 1
+    of cmdShortOption, cmdLongOption:
+      case key
+      of "h", "help":
+        echo usage; quit 0;
+      of "a","animate":
+        c.animate = true
+      of "o", "output":
+        c.output = val
+      of "b","background":
+        for bg in val.split(","):
+          c.backgrounds.add parseEnum[Background](bg)
+      of "s","style":
+        for s in val.split(","):
+          c.styles.add parseEnum[Style](s)
+      of "border":
+        c.border = true
+      else:
+        echo "unknown key-value flag: " & key & "," & val
+    of cmdEnd: discard
+
+  if c.backgrounds.len == 0 or c.styles.len == 0:
+    echo "must provide at least one value for background/style"
+    quit 1
+
+  let logos = collect:
+    for bg in c.backgrounds:
+      for style in c.styles:
         Logo(
-          background: bg,
-          border: border,
-          style: style
-        ).makeLogo()
+            background: bg,
+            border: c.border,
+            style: style,
+            animate: c.animate
+          )
+  if logos.len == 1:
+    echo "treating output as filename"
+    makeLogo(logos[0], prefix = "", fileName = c.output)
+  else:
+    for logo in logos:
+      makeLogo(logo, prefix = c.output)
 
-  let defaults = @[
-    (Logo(background: bgCircle, border: true, style: stDark), "light.svg"),
-    (Logo(background: bgCircle, border: true, style: stLight), "dark.svg")
-  ]
-  for (logo, fname) in defaults:
-    logo.makeLogo(fileName = fname, prefix = "docs")
-
-  when defined(makeDefault):
-    Logo(background: bgCircle, border: true, style: stDark).makeLogo(
-      prefix = "assets", "logo.svg")
