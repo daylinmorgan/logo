@@ -86,7 +86,7 @@ proc drawD(animate: bool): Nodes =
     g(class = "d"):
       if animate:
         let coords = $coord.dc.x & " " & $coord.dc.y
-        animateTransform(attributeName="transform", begin="0s" ,dur="2.25s", type="rotate", `from`="0 " & coords, to="360 " & coords)
+        animateTransform(attributeName="transform", begin="0s" ,dur="1s", type="rotate", `from`="0 " & coords, to="360 " & coords)
       circle(cx = coord.dc.x, cy = coord.dc.y, r = coord.dr)
       path(class = "fg", d = &"M {start.x},{start.y} a 1 1 0 0 0 {coord.dr*2} 0 z")
 
